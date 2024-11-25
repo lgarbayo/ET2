@@ -724,22 +724,23 @@ class project extends EntidadAbstracta{
 	validacionesespeciales(atributo, prueba, specialCaseValue) {
 		let fecha = document.getElementById(atributo).value;
 
-		if (atributo == 'start_date_project' || atributo == 'end_date_project') {
-			if (prueba == 'fechavalida') {
-				
-				let fechaf = fecha.split("/");
+		if (atributo == "start_date_project" || atributo == "end_date_project") {
+			if (prueba == "fechavalida") {
 
-				let day = new Number(fechaf[0]);
-				let month = new Number(fechaf[1]);
-				let year = new Number(fechaf[2]);
-				
+				let fechaf = fecha.split("/");
+				if (fechaf.length !== 3) return false;
+
+				let day = parseInt(fechaf[0], 10);
+				let month = parseInt(fechaf[1], 10) - 1; // Restar 1 porque los meses en Date van de 0 a 11
+				let year = parseInt(fechaf[2], 10);
+
+				if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+
+				if (month < 0 || month > 11 || day <= 0) return false;
+
 				let date = new Date(year, month, day);
 
-				if (day <= 0 || month <= 0 || month > 12) {
-					return false;
-				}
-
-				if (day > date.getDate()) {
+				if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
 					return false;
 				}
 
